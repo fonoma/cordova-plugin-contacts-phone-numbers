@@ -18,6 +18,8 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Contacts.Data;
 import android.util.Log;
+import android.content.ContentUris;
+import android.net.Uri;
 import static android.Manifest.permission.READ_CONTACTS;
 
 public class ContactsManager extends CordovaPlugin {
@@ -90,6 +92,7 @@ public class ContactsManager extends CordovaPlugin {
             ContactsContract.CommonDataKinds.Phone.NUMBER,
             ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER,
             ContactsContract.CommonDataKinds.Phone.TYPE,
+            ContactsContract.CommonDataKinds.Photo.PHOTO,
             ContactsContract.Data.CONTACT_ID,
             ContactsContract.Data.MIMETYPE
         };
@@ -157,6 +160,16 @@ public class ContactsManager extends CordovaPlugin {
                         contact.put("lastName", c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME)));
                         contact.put("middleName", c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME)));
                         contact.put("displayName", c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+                    }
+                    else if(mimetype.equals(ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE)){
+
+                       JSONObject photo = new JSONObject();
+
+                       Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, (Long.valueOf(contactId)));
+                       Uri photoUri = Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+                       photo.put("value", photoUri);
+
+                       contact.put("photo", photo);
                     }
                     else if (mimetype.equals(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)) {
                         phones.put(getPhoneNumber(c));
