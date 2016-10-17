@@ -24,8 +24,8 @@ interface Contact {
     lastName?: string;
     /** The name of this Contact, suitable for display to end users. */
     displayName?: string;
-    /** The photo of this Contact. */
-    photo?: string;
+    /** The URI(s) photo(s) of this Contact. */
+    photos?: string[];
     /** An array of all the contact's phone numbers. */
     phoneNumbers?: ContactPhoneNumber[];
 }
@@ -36,7 +36,7 @@ declare var Contact: {
         firstName?: string,
         LastName?: string,
         displayName?: string,
-        photo?: string,
+        photos?: string[], // array with the contact photo(s)
         phoneNumbers?: ContactPhoneNumber[]): Contact
 };
 

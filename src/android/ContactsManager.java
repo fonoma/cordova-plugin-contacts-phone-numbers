@@ -17,10 +17,10 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Contacts.Data;
+import static android.Manifest.permission.READ_CONTACTS;
 import android.util.Log;
 import android.content.ContentUris;
 import android.net.Uri;
-import static android.Manifest.permission.READ_CONTACTS;
 
 public class ContactsManager extends CordovaPlugin {
 
@@ -125,6 +125,7 @@ public class ContactsManager extends CordovaPlugin {
 
         JSONObject contact = new JSONObject();
         JSONArray phones = new JSONArray();
+        JSONArray photos = new JSONArray();
 
         try {
             if (c.getCount() > 0) {
@@ -142,6 +143,7 @@ public class ContactsManager extends CordovaPlugin {
                         // Clean up the objects
                         contact = new JSONObject();
                         phones = new JSONArray();
+                        photos = new JSONArray();
 
                         // Set newContact to true as we are starting to populate a new contact
                         newContact = true;
@@ -156,10 +158,7 @@ public class ContactsManager extends CordovaPlugin {
                     mimetype = c.getString(c.getColumnIndex(ContactsContract.Data.MIMETYPE)); // Grab the mimetype of the current row as it will be used in a lot of comparisons
 
                     if (mimetype.equals(ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)) {
-                        contact.put("firstName", c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME)));
-                        contact.put("lastName", c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME)));
-                        contact.put("middleName", c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME)));
-                        contact.put("displayName", c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+                       contact.put("name", nameQuery(c));
                     }
                     else if(mimetype.equals(ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE)){
 
@@ -167,9 +166,12 @@ public class ContactsManager extends CordovaPlugin {
 
                        Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, (Long.valueOf(contactId)));
                        Uri photoUri = Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+
                        photo.put("value", photoUri);
 
-                       contact.put("photo", photo);
+                       photos.put(photo);
+
+                       contact.put("photos", photos);
                     }
                     else if (mimetype.equals(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)) {
                         phones.put(getPhoneNumber(c));
@@ -188,6 +190,27 @@ public class ContactsManager extends CordovaPlugin {
         c.close();
         return contacts;
     }
+    /**
+        * Create a ContactName JSONObject
+        * @param cursor the current database row
+        * @return a JSONObject representing a ContactName
+        */
+       private JSONObject nameQuery(Cursor cursor) {
+           JSONObject contactName = new JSONObject();
+           try {
+               String familyName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME));
+               String givenName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME));
+               String middleName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME));
+
+               contactName.put("familyName", familyName);
+               contactName.put("givenName", givenName);
+               contactName.put("middleName", middleName);
+
+           } catch (JSONException e) {
+               Log.e(LOG_TAG, e.getMessage(), e);
+           }
+           return contactName;
+       }
 
     /**
      * Create a phone number JSONObject
