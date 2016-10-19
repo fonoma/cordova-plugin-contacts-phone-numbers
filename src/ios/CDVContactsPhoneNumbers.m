@@ -132,8 +132,18 @@
                     [contactDictionary setObject: middleName forKey:@"middleName"];
                     [contactDictionary setObject: phoneNumbersArray forKey:@"phoneNumbers"];
 
+                    // add the photo in the photos array
+                    NSMutableArray* photos = [NSMutableArray arrayWithCapacity:1];
+
+                    NSMutableDictionary* photoData = [NSMutableDictionary dictionaryWithCapacity:1];
+
+                    NSString *photoUri = contactId;  // [NSString stringWithFormat:@"%d", ABRecordGetRecordID(ref)];
+
+                    [photoData setObject:photoUri forKey:@"value"];
+                    [photos addObject:newDict];
+
                     //add the contact to the list to return
-                    [contactsWithPhoneNumbers addObject:contactDictionary];
+                    [contactsWithPhoneNumbers setObject: photos forKey:@"photos"];
                 }
                 CFRelease(phones);
             }
