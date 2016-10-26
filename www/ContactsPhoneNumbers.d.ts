@@ -43,7 +43,7 @@ declare var Contact: {
 /** Contains different kinds of information about a Contact object's phone number. */
 interface ContactPhoneNumber {
     /** The contact phone number's number. */
-    number?: string;
+    value?: string;
     /** The contact phone number's normalized number. */
     normalizedNumber?: string;
     /** The contact phone number's type (WORK, MOBILE, HOME or OTHER). */
@@ -52,7 +52,7 @@ interface ContactPhoneNumber {
 
 declare var ContactPhoneNumber: {
     /** Constructor for ContactPhoneNumber object */
-    new (number?: string,
+    new (value: string,
         normalizedNumber?: string,
         type?: string): ContactPhoneNumber
 };

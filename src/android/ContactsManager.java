@@ -221,7 +221,7 @@ public class ContactsManager extends CordovaPlugin {
         JSONObject phoneNumber = new JSONObject();
         String number = cursor.getString(cursor.getColumnIndex(Phone.NUMBER));
         String normalizedNumber = cursor.getString(cursor.getColumnIndex(Phone.NORMALIZED_NUMBER));
-        phoneNumber.put("number", number);
+        phoneNumber.put("value", number);
         phoneNumber.put("normalizedNumber", (normalizedNumber == null) ? number : normalizedNumber);
         phoneNumber.put("type", getPhoneTypeLabel(cursor.getInt(cursor.getColumnIndex(Phone.TYPE))));
         return phoneNumber;
