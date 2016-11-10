@@ -82,7 +82,7 @@
 
                         // creating the nested element with the phone number details
                         NSMutableDictionary* phoneNumberDictionary = [NSMutableDictionary dictionaryWithCapacity:1];
-                        [phoneNumberDictionary setObject: number forKey:@"number"];
+                        [phoneNumberDictionary setObject: number forKey:@"value"];
                         [phoneNumberDictionary setObject: number forKey:@"normalizedNumber"];
                         [phoneNumberDictionary setObject: phoneLabel forKey:@"type"];
                         // adding this phone number to the list of phone numbers for this user
@@ -100,15 +100,7 @@
                         firstName = @"";
                     displayName = firstName;
 
-                    NSString *middleName = (__bridge_transfer NSString*)ABRecordCopyValue(ref, kABPersonMiddleNameProperty);
-                    if (!middleName) {
-                        middleName = @"";
-                    }
-                    else {
-                        if (displayName.length)
-                            displayName = [displayName stringByAppendingString:@" "];
-                        displayName = [displayName stringByAppendingString:middleName];
-                    }
+                    NSString *middleName = @"";
 
                     NSString *lastName = (__bridge_transfer NSString*)ABRecordCopyValue(ref, kABPersonLastNameProperty);
                     if (!lastName) {
@@ -133,6 +125,8 @@
                     [contactDictionary setObject: phoneNumbersArray forKey:@"phoneNumbers"];
 
                     // add the photo in the photos array
+                    /*
+
                     NSMutableArray* photos = [NSMutableArray arrayWithCapacity:1];
 
                     NSMutableDictionary* photoData = [NSMutableDictionary dictionaryWithCapacity:1];
@@ -144,6 +138,8 @@
 
                     //add the contact to the list to return
                     [contactsWithPhoneNumbers setObject: photos forKey:@"photos"];
+
+                    */
                 }
                 CFRelease(phones);
             }
