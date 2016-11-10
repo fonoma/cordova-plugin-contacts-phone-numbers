@@ -100,7 +100,15 @@
                         firstName = @"";
                     displayName = firstName;
 
-                    NSString *middleName = @"";
+                    NSString *middleName = (__bridge_transfer NSString*)ABRecordCopyValue(ref, kABPersonMiddleNameProperty);
+                    if (!middleName) {
+                        middleName = @"";
+                    }
+                    else {
+                        if (displayName.length)
+                            displayName = [displayName stringByAppendingString:@" "];
+                        displayName = [displayName stringByAppendingString:middleName];
+                    }
 
                     NSString *lastName = (__bridge_transfer NSString*)ABRecordCopyValue(ref, kABPersonLastNameProperty);
                     if (!lastName) {
