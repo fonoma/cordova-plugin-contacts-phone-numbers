@@ -135,9 +135,9 @@
                     // add the photo in the photos array
                     /*
 
-                    NSMutableArray* photos = [NSMutableArray arrayWithCapacity:1];
+                    NSMutableArray *photos = [NSMutableArray arrayWithCapacity:1];
 
-                    NSMutableDictionary* photoData = [NSMutableDictionary dictionaryWithCapacity:1];
+                    NSMutableDictionary *photoData = [NSMutableDictionary dictionaryWithCapacity:1];
 
                     NSString *photoUri = contactId;  // [NSString stringWithFormat:@"%d", ABRecordGetRecordID(ref)];
 
